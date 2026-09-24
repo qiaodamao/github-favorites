@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { fetchRepo, parseRepoInput } from './api/github'
 import { favorites } from './store/favorites'
 import { formatNumber } from './utils/format'
@@ -143,11 +143,32 @@ async function addRepo() {
     const isNew = favorites.add(repo)
     input.value = ''
     toast(isNew ? `已收藏 ${repo.fullName} ★${formatNumber(repo.stargazers)}` : `已更新 ${repo.fullName} 的数据`)
+    if (!isNew) flashCard(repo.fullName)
   } catch (e) {
     toast(e.message, true)
   } finally {
     adding.value = false
   }
+}
+
+// 重复收藏时定位到已有卡片：若被当前筛选隐藏则先清空筛选，再滚动 + 闪光提示
+async function flashCard(fullName) {
+  const key = fullName.toLowerCase()
+  if (!filtered.value.some((r) => r.fullName.toLowerCase() === key)) {
+    query.value = ''
+    lang.value = ''
+    cat.value = ''
+  }
+  await nextTick()
+  const el = [...document.querySelectorAll('.card')].find(
+    (c) => c.dataset.fullName && c.dataset.fullName.toLowerCase() === key
+  )
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  el.classList.remove('flash')
+  void el.offsetWidth
+  el.classList.add('flash')
+  setTimeout(() => el.classList.remove('flash'), 1800)
 }
 
 function toggleDark() {
@@ -251,7 +272,7 @@ onMounted(() => {
     </datalist>
 
     <section v-if="filtered.length" class="grid">
-      <RepoCard v-for="r in filtered" :key="r.fullName" :repo="r" @toast="toast" />
+      <RepoCard v-for="r in filtered" :key="r.fullName" :repo="r" :data-full-name="r.fullName" @toast="toast" />
     </section>
     <section v-else class="empty">
       <p>{{ items.length ? '没有匹配的项目，换个关键词试试' : '还没有收藏，粘贴一个 GitHub 项目地址开始吧' }}</p>

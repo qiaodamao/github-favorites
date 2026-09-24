@@ -1,5 +1,74 @@
 [
   {
+    "fullName": "visioncortex/vtracer",
+    "owner": "visioncortex",
+    "name": "vtracer",
+    "avatar": "https://avatars.githubusercontent.com/u/72055406?v=4",
+    "description": "Raster to Vector Graphics Converter",
+    "stargazers": 7110,
+    "forks": 490,
+    "language": "Rust",
+    "topics": [
+      "image-procesing",
+      "rust",
+      "svg",
+      "vector-graphics"
+    ],
+    "homepage": "https://www.visioncortex.org/vtracer/",
+    "pushedAt": "2026-09-20T11:40:49Z",
+    "htmlUrl": "https://github.com/visioncortex/vtracer",
+    "refreshedAt": "2026-09-24T07:57:34.117Z",
+    "addedAt": "2026-09-24T07:57:34.117Z",
+    "category": "效率工具"
+  },
+  {
+    "fullName": "jihe520/mindpocket",
+    "owner": "jihe520",
+    "name": "mindpocket",
+    "avatar": "https://avatars.githubusercontent.com/u/36144612?v=4",
+    "description": "Open-source, free, multi-platform, one-click deploy, AI Agent–integrated personal bookmarking system｜完全开源、免费、多端、一键部署、AI Agent 集成的个人收藏夹系统",
+    "stargazers": 350,
+    "forks": 179,
+    "language": "TypeScript",
+    "topics": [
+      "agent",
+      "ai",
+      "bookmarks-manager",
+      "rag",
+      "vercel"
+    ],
+    "homepage": "https://mindpocket.top",
+    "pushedAt": "2026-07-28T02:20:32Z",
+    "htmlUrl": "https://github.com/jihe520/mindpocket",
+    "refreshedAt": "2026-09-24T07:55:51.640Z",
+    "addedAt": "2026-09-24T07:55:51.640Z",
+    "category": "效率工具"
+  },
+  {
+    "fullName": "VoltAgent/awesome-design-md",
+    "owner": "VoltAgent",
+    "name": "awesome-design-md",
+    "avatar": "https://avatars.githubusercontent.com/u/201282378?v=4",
+    "description": "A collection of DESIGN.md files analysis by popular brand design systems. Drop one into your project and let coding agents generate a matching UI.",
+    "stargazers": 117606,
+    "forks": 13177,
+    "language": null,
+    "topics": [
+      "awesome-list",
+      "design-md",
+      "design-system",
+      "design-tokens",
+      "figma",
+      "google-stitch"
+    ],
+    "homepage": "https://getdesign.md/",
+    "pushedAt": "2026-09-21T08:23:38Z",
+    "htmlUrl": "https://github.com/VoltAgent/awesome-design-md",
+    "refreshedAt": "2026-09-24T07:51:59.954Z",
+    "addedAt": "2026-09-24T07:51:59.954Z",
+    "category": "设计创意"
+  },
+  {
     "fullName": "qiaodamao/wallpaper-mockup-generator",
     "owner": "qiaodamao",
     "name": "wallpaper-mockup-generator",
@@ -194,29 +263,6 @@
     "refreshedAt": "2026-09-24T02:42:43.162Z"
   },
   {
-    "fullName": "microsoft/vscode",
-    "owner": "microsoft",
-    "name": "vscode",
-    "avatar": "https://avatars.githubusercontent.com/u/6154722?v=4",
-    "description": "Visual Studio Code",
-    "stargazers": 192830,
-    "forks": 43032,
-    "language": "TypeScript",
-    "topics": [
-      "editor",
-      "electron",
-      "microsoft",
-      "typescript",
-      "visual-studio-code"
-    ],
-    "homepage": "https://code.visualstudio.com",
-    "pushedAt": "2026-09-24T05:38:06Z",
-    "htmlUrl": "https://github.com/microsoft/vscode",
-    "category": "开发工具",
-    "addedAt": null,
-    "refreshedAt": "2026-09-24T05:42:24.842Z"
-  },
-  {
     "fullName": "yt-dlp/yt-dlp",
     "owner": "yt-dlp",
     "name": "yt-dlp",
@@ -307,28 +353,5 @@
     "htmlUrl": "https://github.com/openclaw/openclaw",
     "addedAt": null,
     "refreshedAt": "2026-09-24T02:42:43.234Z"
-  },
-  {
-    "fullName": "junegunn/fzf",
-    "owner": "junegunn",
-    "name": "fzf",
-    "avatar": "https://avatars.githubusercontent.com/u/700826?v=4",
-    "description": ":cherry_blossom: A command-line fuzzy finder",
-    "stargazers": 83223,
-    "forks": 3363,
-    "language": "Go",
-    "topics": [
-      "bash",
-      "cli",
-      "fish",
-      "fzf",
-      "go",
-      "neovim"
-    ],
-    "homepage": "https://junegunn.github.io/fzf/",
-    "pushedAt": "2026-09-21T14:49:46Z",
-    "htmlUrl": "https://github.com/junegunn/fzf",
-    "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.238Z"
   }
 ]

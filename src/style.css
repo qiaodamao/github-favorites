@@ -387,6 +387,14 @@ html.dark .select {
 }
 .card:hover { box-shadow: var(--shadow-2); }
 
+/* 重复收藏时定位已有卡片的高亮闪烁 */
+.card.flash { animation: card-flash 1.6s ease; }
+@keyframes card-flash {
+  0%, 100% { border-color: var(--hairline); box-shadow: var(--shadow-1); }
+  12%, 45% { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.14), var(--shadow-2); }
+  65%, 90% { border-color: var(--hairline); box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.06), var(--shadow-1); }
+}
+
 .card-title {
   display: flex;
   align-items: center;
