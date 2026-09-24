@@ -48,10 +48,10 @@ export async function createGist(items) {
   return j.id
 }
 
-// Find the user's existing sync gist by its filename
+// Find the user's existing sync gist by its filename (most recently updated wins)
 export async function findGist() {
   const list = await request(
-    'https://api.github.com/gists?per_page=100',
+    'https://api.github.com/gists?per_page=100&sort=updated&direction=desc',
     { headers: headers() },
     '查询 Gist'
   )

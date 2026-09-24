@@ -55,11 +55,28 @@ Build command `npm run build`，Build output directory `dist`。
 
 ## 更新示例数据
 
-内置收藏来自 `src/data/seed.json`（仅首次打开、localStorage 为空时展示）。想刷新：
+内置收藏来自 `src/data/seed.json`（首次打开、localStorage 为空且未配置默认收藏时展示）。想刷新：
 
 ```bash
 node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 seed.json
 ```
+
+## 默认公共收藏（可选）
+
+让所有新访客看到你维护的一份公开收藏清单：
+
+1. 打开 <https://gist.github.com/>，点右上角 **+** 新建 Gist；
+2. **可见性选 Public**（Secret 匿名读不到）；文件名必须填 `github-favorites.json`；
+3. 内容先填 `[]`（空数组），点 **Create public gist**；
+4. 回到这个网站，填好你的 Token 并点「开启云端同步」——网站会找到这个 Gist 并把你的收藏写进去；
+5. 打开你的 Gist 页面，点文件右上角的 **Raw**，复制地址栏链接，但**必须删掉中间那串提交哈希**，
+   让它变成固定地址（否则永远读到旧数据）：
+   `https://gist.githubusercontent.com/你的用户名/GistID/raw/github-favorites.json`；
+6. 把固定链接填进 `src/config.js` 的 `DEFAULT_GIST_RAW_URL`，提交并重新部署。
+
+生效后：你每次收藏/刷新数据都会自动同步进这个 Gist，访客看到的默认列表随之更新；
+拉取失败（断网/Gist 删除）时访客自动回退到内置示例数据。
+注意：开启同步前需先在 config.js 里填好链接并部署，之后你 Gist 里的内容即为公开可见。
 
 ## 目录结构
 
@@ -67,8 +84,10 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
 ├── index.html
 ├── src/
 │   ├── App.vue                  # 页面主体：添加、搜索、筛选、排序
+│   ├── config.js                # 默认公共收藏 Gist 链接等站点配置
 │   ├── api/github.js            # GitHub API 封装、地址解析
 │   ├── api/gist.js              # 云端同步：Gist 读写
+│   ├── api/defaults.js          # 拉取默认公共收藏
 │   ├── store/favorites.js       # 收藏状态 + localStorage 持久化
 │   ├── store/sync.js            # 云端同步：开启/拉取合并/推送/自动同步
 │   ├── components/

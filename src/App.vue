@@ -6,7 +6,8 @@ import { formatNumber } from './utils/format'
 import RepoCard from './components/RepoCard.vue'
 import SettingsModal from './components/SettingsModal.vue'
 import CategoryManager from './components/CategoryManager.vue'
-import { initSync, onSyncToast } from './store/sync'
+import { initSync, onSyncToast, sync } from './store/sync'
+import { fetchDefaultFavorites } from './api/defaults'
 
 const input = ref('')
 const adding = ref(false)
@@ -81,6 +82,10 @@ const refreshingAll = ref(null)
 async function refreshRepos(list, label) {
   if (!list.length) return
   if (!navigator.onLine) return
+  if (!favorites.isUserOwned()) {
+    toast('当前显示的是默认收藏，先收藏任意项目即可刷新数据', true)
+    return
+  }
   let done = 0
   let ok = 0
   refreshingAll.value = { done, total: list.length }
@@ -108,8 +113,17 @@ function staleList() {
 }
 
 function refreshStale() {
+  if (!favorites.isUserOwned()) return
   const list = staleList()
   if (list.length) refreshRepos(list, '自动刷新过期数据')
+}
+
+async function loadDefaults() {
+  if (favorites.isUserOwned() || sync.gistId) return
+  const list = await fetchDefaultFavorites()
+  if (list && list.length && !favorites.isUserOwned() && !sync.gistId) {
+    favorites.useDefault(list)
+  }
 }
 
 function refreshAllNow() {
@@ -148,7 +162,9 @@ onMounted(() => {
     document.documentElement.classList.add('dark')
   }
   onSyncToast(toast)
-  initSync().then(refreshStale)
+  initSync()
+    .then(loadDefaults)
+    .then(refreshStale)
 })
 </script>
 

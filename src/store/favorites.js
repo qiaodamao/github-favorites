@@ -3,12 +3,18 @@ import seed from '../data/seed.json'
 
 const KEY = 'ghf:favorites:v1'
 
+// 用户从未主动操作过数据（看到的只是默认/示例列表）时为 true
+let userOwned = false
+
 function load() {
   try {
     const raw = localStorage.getItem(KEY)
     if (raw !== null) {
       const list = JSON.parse(raw)
-      if (Array.isArray(list)) return list
+      if (Array.isArray(list)) {
+        userOwned = true
+        return list
+      }
     }
   } catch { /* corrupted storage falls back to seed */ }
   return seed.map((r) => ({ ...r, addedAt: null }))
@@ -19,6 +25,7 @@ const state = reactive({
 })
 
 function persist() {
+  userOwned = true
   localStorage.setItem(KEY, JSON.stringify(state.items))
   persistListeners.forEach((fn) => fn())
 }
@@ -30,6 +37,14 @@ export function onPersist(fn) {
 
 export const favorites = {
   items: computed(() => state.items),
+  isUserOwned() {
+    return userOwned
+  },
+  // 载入公共默认收藏：只改内存、不写 localStorage，用户第一次操作即成为自己的数据
+  useDefault(list) {
+    if (userOwned) return
+    state.items = list
+  },
   has(fullName) {
     return state.items.some((i) => i.fullName.toLowerCase() === fullName.toLowerCase())
   },
