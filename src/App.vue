@@ -168,7 +168,7 @@ async function flashCard(fullName) {
   el.classList.remove('flash')
   void el.offsetWidth
   el.classList.add('flash')
-  setTimeout(() => el.classList.remove('flash'), 1800)
+  setTimeout(() => el.classList.remove('flash'), 2400)
 }
 
 function toggleDark() {

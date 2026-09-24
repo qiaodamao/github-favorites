@@ -72,7 +72,8 @@ export const favorites = {
     const now = new Date().toISOString()
     if (idx >= 0) {
       const old = state.items[idx]
-      state.items[idx] = { ...old, ...repo, category: repo.category ?? old.category, addedAt: old.addedAt || now }
+      // 重复收藏只刷新数据、绝不改动原收藏时间（哪怕是 null），保证卡片位置不变
+      state.items[idx] = { ...old, ...repo, category: repo.category ?? old.category, addedAt: old.addedAt }
     } else {
       state.items.unshift({ ...repo, addedAt: now })
     }
