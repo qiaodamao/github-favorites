@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { favorites } from '../store/favorites'
-import { catOrder, saveOrder, sortCategories } from '../store/catOrder'
+import { saveOrder, sortCategories } from '../store/catOrder'
 
 const emit = defineEmits(['toast', 'close'])
 
@@ -46,13 +46,12 @@ function saveRename(original) {
     emit('toast', `分类「${v}」已存在，请换一个名字`, true)
     return
   }
+  // 先捕获当前完整显示顺序，重命名后原位替换，避免任何分类跳位
+  const order = counts.value.map(([c]) => c)
   const n = favorites.renameCategory(original, v)
-  saveOrder(catOrderNext(original, v))
+  saveOrder(order.map((c) => (c === original ? v : c)))
   emit('toast', `已将分类「${original}」重命名为「${v}」（${n} 个项目）`)
   cancelRename()
-}
-function catOrderNext(original, v) {
-  return catOrder.value.map((c) => (c === original ? v : c))
 }
 const armedDelete = ref('')
 let armTimer = null
@@ -70,8 +69,9 @@ onBeforeUnmount(() => clearTimeout(armTimer))
 function removeCategory(name, count) {
   if (armedDelete.value !== name) return armDelete(name)
   disarmDelete()
+  const order = counts.value.map(([c]) => c)
   const n = favorites.clearCategory(name)
-  saveOrder(catOrder.value.filter((c) => c !== name))
+  saveOrder(order.filter((c) => c !== name))
   if (editing.name === name) cancelRename()
   emit('toast', `已删除分类「${name}」（${n} 个项目变为未分类）`)
 }

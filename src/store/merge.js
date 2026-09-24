@@ -14,9 +14,14 @@ export function mergeLists(local, remote) {
       continue
     }
     const [winner, loser] = (item.addedAt || '') >= (prev.addedAt || '') ? [item, prev] : [prev, item]
-    map.set(k, winner.category === undefined && loser.category !== undefined
-      ? { ...winner, category: loser.category }
-      : winner)
+    // 分类必须按 catAt（分类最后修改时间）裁决，而不是 addedAt：
+    // 重命名不改动 addedAt，平局会让云端旧分类覆盖本地刚改的新名字
+    let category = winner.category === undefined ? loser.category : winner.category
+    const wc = winner.catAt || ''
+    const lc = loser.catAt || ''
+    if (loser.category !== undefined && lc > wc) category = loser.category
+    const catAt = wc >= lc ? wc : lc
+    map.set(k, catAt ? { ...winner, category, catAt } : { ...winner, category })
   }
   return [...map.values()].sort((a, b) => (b.addedAt || '').localeCompare(a.addedAt || ''))
 }

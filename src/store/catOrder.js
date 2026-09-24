@@ -20,16 +20,18 @@ export function saveOrder(list) {
   localStorage.setItem(KEY, JSON.stringify(catOrder.value))
 }
 
+// 建议列表中的位置；不在列表里的自定义分类排在已知分类之后（而不是 indexOf=-1 跳到最前）
+function suggestionRank(c) {
+  const i = CAT_SUGGESTIONS.indexOf(c)
+  return i < 0 ? CAT_SUGGESTIONS.length : i
+}
+
 export function sortCategories(names) {
   const idx = new Map(catOrder.value.map((c, i) => [c, i]))
   const tail = catOrder.value.length
   return [...names].sort((a, b) => {
     const ai = idx.has(a) ? idx.get(a) : tail
     const bi = idx.has(b) ? idx.get(b) : tail
-    return (
-      ai - bi ||
-      CAT_SUGGESTIONS.indexOf(a) - CAT_SUGGESTIONS.indexOf(b) ||
-      a.localeCompare(b)
-    )
+    return ai - bi || suggestionRank(a) - suggestionRank(b) || a.localeCompare(b)
   })
 }

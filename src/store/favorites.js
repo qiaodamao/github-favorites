@@ -73,9 +73,14 @@ export const favorites = {
     if (idx >= 0) {
       const old = state.items[idx]
       // 重复收藏只刷新数据、绝不改动原收藏时间（哪怕是 null），保证卡片位置不变
-      state.items[idx] = { ...old, ...repo, category: repo.category ?? old.category, addedAt: old.addedAt }
+      const category = repo.category ?? old.category
+      const changed = category !== old.category
+      state.items[idx] = {
+        ...old, ...repo, category, addedAt: old.addedAt,
+        catAt: changed ? (repo.catAt || now) : (old.catAt ?? repo.catAt),
+      }
     } else {
-      state.items.unshift({ ...repo, addedAt: now })
+      state.items.unshift({ ...repo, addedAt: now, ...(repo.category ? { catAt: repo.catAt || now } : {}) })
     }
     // 重新收藏即撤销该项目的删除记录
     const k = repo.fullName.toLowerCase()
@@ -94,7 +99,12 @@ export const favorites = {
   update(fullName, repo) {
     const rk = repo.fullName.toLowerCase()
     const idx = state.items.findIndex((i) => i.fullName.toLowerCase() === rk)
-    if (idx >= 0) state.items[idx] = { ...state.items[idx], ...repo, addedAt: state.items[idx].addedAt }
+    if (idx >= 0) {
+      const old = state.items[idx]
+      const merged = { ...old, ...repo, addedAt: old.addedAt }
+      if (merged.category !== old.category) merged.catAt = new Date().toISOString()
+      state.items[idx] = merged
+    }
     else if (fullName) this.add(repo)
     persist()
   },
@@ -115,13 +125,15 @@ export const favorites = {
   },
   renameCategory(oldName, newName) {
     let n = 0
-    for (const i of state.items) if (i.category === oldName) { i.category = newName; n++ }
+    const now = new Date().toISOString()
+    for (const i of state.items) if (i.category === oldName) { i.category = newName; i.catAt = now; n++ }
     if (n) persist()
     return n
   },
   clearCategory(name) {
     let n = 0
-    for (const i of state.items) if (i.category === name) { i.category = ''; n++ }
+    const now = new Date().toISOString()
+    for (const i of state.items) if (i.category === name) { i.category = ''; i.catAt = now; n++ }
     if (n) persist()
     return n
   },
