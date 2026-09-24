@@ -101,7 +101,7 @@ async function importFile(e) {
 
       <section>
         <h4>关于</h4>
-        <p class="hint">收藏数据保存在浏览器 localStorage 中，清除浏览器数据会丢失，请定期导出备份。</p>
+        <p class="hint">收藏数据保存在浏览器 localStorage 中，清除浏览器数据会丢失，请定期导出备份，或者使用 GitHub Gist 同步数据。</p>
       </section>
     </div>
   </div>

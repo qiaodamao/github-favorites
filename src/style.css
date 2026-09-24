@@ -58,6 +58,9 @@ html.dark {
 
 * { box-sizing: border-box; }
 
+/* 预留滚动条轨道，筛选切换时页面宽度不再跳动 */
+html { overflow-y: scroll; scrollbar-gutter: stable; }
+
 body {
   margin: 0;
   overflow-x: clip;
@@ -91,7 +94,8 @@ a:hover { color: var(--link-deep); }
   justify-content: space-between;
   gap: 16px;
 }
-.brand { display: flex; align-items: center; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+.brand:hover h1 { opacity: 0.75; }
 .brand h1 {
   margin: 0;
   font-size: 16px;
@@ -189,25 +193,31 @@ html.dark .hero::before { opacity: 0.24; }
 
 .add-box {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   max-width: 640px;
   margin: 0 auto;
+  padding: 6px 6px 6px 22px;
+  background: var(--elevated);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .add-input {
   flex: 1;
-  padding: 10px 12px;
+  min-width: 0;
+  padding: 8px 0;
   font-family: var(--sans);
   font-size: 14px;
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-sm);
-  background: var(--elevated);
+  border: none;
+  background: transparent;
   color: var(--ink);
   outline: none;
-  box-shadow: var(--shadow-1);
 }
 .add-input::placeholder { color: var(--faint); }
-.add-input:focus { border-color: var(--ink); box-shadow: 0 0 0 4px var(--link-soft); }
-html.dark .add-input:focus { box-shadow: 0 0 0 4px rgba(50, 146, 255, 0.25); }
+.add-box:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px var(--link-soft); }
+html.dark .add-box:focus-within { box-shadow: 0 0 0 4px rgba(50, 146, 255, 0.25); }
 
 .hero-hint {
   margin: 16px 0 0;
@@ -296,6 +306,7 @@ html.dark .select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 .select:focus { border-color: var(--ink); }
+.toolbar .btn-sm { height: 36px; padding: 0 12px; }
 .count { font-family: var(--mono); font-size: 12px; color: var(--mute); }
 
 /* ---------- category pills ---------- */
@@ -634,7 +645,8 @@ html.dark .select {
   .tagline { display: none; }
 }
 @media (max-width: 640px) {
-  .add-box { flex-direction: column; }
+  .add-box { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px; border-radius: var(--r-lg); }
+  .add-input { padding: 12px 8px; }
   .btn.primary { width: 100%; }
   .grid { grid-template-columns: 1fr; gap: 16px; }
   .stat span { display: none; }

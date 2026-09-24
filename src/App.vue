@@ -39,6 +39,15 @@ const languages = computed(() => {
 
 const CAT_SUGGESTIONS = ['AI', '开发工具', '命令行工具', '设计创意', '资源集合', '前端', '学习资源', '效率工具']
 
+function goHome() {
+  query.value = ''
+  lang.value = ''
+  cat.value = ''
+  sort.value = 'added'
+  input.value = ''
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const categories = computed(() => {
   const set = new Set(items.value.map((i) => i.category).filter(Boolean))
   const known = [...set].sort((a, b) => CAT_SUGGESTIONS.indexOf(a) - CAT_SUGGESTIONS.indexOf(b) || a.localeCompare(b))
@@ -146,7 +155,7 @@ onMounted(() => {
 <template>
   <header class="header">
     <div class="header-inner">
-      <div class="brand">
+      <div class="brand" title="回到首页" @click="goHome">
         <img src="/favicon.svg" alt="logo" width="32" height="32" />
         <div>
           <h1>GitHub 收藏</h1>
