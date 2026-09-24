@@ -1,8 +1,14 @@
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { favorites } from '../store/favorites'
 
 const emit = defineEmits(['toast', 'close'])
+
+function onKey(e) {
+  if (e.key === 'Escape') emit('close')
+}
+onMounted(() => window.addEventListener('keydown', onKey))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 const counts = computed(() => {
   const m = new Map()
@@ -33,8 +39,22 @@ function saveRename(original) {
   emit('toast', `已将分类「${original}」重命名为「${v}」（${n} 个项目）`)
   cancelRename()
 }
+const armedDelete = ref('')
+let armTimer = null
+function armDelete(name) {
+  armedDelete.value = name
+  clearTimeout(armTimer)
+  armTimer = setTimeout(() => { armedDelete.value = '' }, 3000)
+}
+function disarmDelete() {
+  clearTimeout(armTimer)
+  armedDelete.value = ''
+}
+onBeforeUnmount(() => clearTimeout(armTimer))
+
 function removeCategory(name, count) {
-  if (!confirm(`删除分类「${name}」？该分类下 ${count} 个项目将变为未分类。`)) return
+  if (armedDelete.value !== name) return armDelete(name)
+  disarmDelete()
   const n = favorites.clearCategory(name)
   if (editing.name === name) cancelRename()
   emit('toast', `已删除分类「${name}」（${n} 个项目变为未分类）`)
@@ -60,6 +80,7 @@ function removeCategory(name, count) {
               v-model="editing.value"
               class="cat-rename"
               type="text"
+              @keydown.esc.stop
               @keyup.enter="saveRename(name)"
               @keyup.esc="cancelRename()"
             />
@@ -70,7 +91,13 @@ function removeCategory(name, count) {
             <span class="cat-name">{{ name }}</span>
             <span class="cat-count">{{ count }} 个项目</span>
             <button class="btn" @click="startRename(name)">重命名</button>
-            <button class="btn ghost" @click="removeCategory(name, count)">删除</button>
+            <button
+              class="btn ghost"
+              :class="{ 'danger-armed': armedDelete === name }"
+              :title="armedDelete === name ? '再次点击确认：该分类下项目将变为未分类' : '删除分类'"
+              @click="removeCategory(name, count)"
+              @mouseleave="armedDelete === name && disarmDelete()"
+            >{{ armedDelete === name ? '确认删除' : '删除' }}</button>
           </template>
         </li>
       </ul>

@@ -1,10 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { getToken, setToken } from '../api/github'
 import { favorites } from '../store/favorites'
 import { sync, enableCloudSync, pull, push, disableCloudSync, setAutoSync } from '../store/sync'
 
 const emit = defineEmits(['toast', 'close'])
+
+function onKey(e) {
+  if (e.key === 'Escape') emit('close')
+}
+onMounted(() => window.addEventListener('keydown', onKey))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 const token = ref(getToken())
 const fileInput = ref(null)
 
@@ -78,7 +84,7 @@ async function importFile(e) {
             <button class="btn ghost" @click="disableCloudSync()">关闭同步</button>
           </template>
         </div>
-        <p class="hint">说明：自动推送会先读取云端、合并后再写回，多设备并发修改基本不会互相覆盖；「拉取合并」按项目名取两端并集；手动「推送到云端」则整体覆盖（用于把删除操作同步过去）。</p>
+        <p class="hint">说明：自动同步会先读取云端、合并后再写回，多设备并发修改基本不会互相覆盖；新增、修改、取消收藏都会自动同步（删除记录保留 90 天，删除后仍可重新收藏，不会复活旧数据）。「拉取合并」主动与云端合并一次；手动「推送到云端」则整体覆盖，用于以本地数据重置云端。</p>
       </section>
 
       <section>

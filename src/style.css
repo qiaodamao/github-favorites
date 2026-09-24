@@ -266,6 +266,10 @@ html.dark .btn.primary:hover { filter: brightness(1.15); }
 .btn.ghost { background: transparent; border-color: transparent; color: var(--body); }
 .btn.ghost:hover { color: var(--ink); background: var(--inset); border-color: transparent; box-shadow: none; }
 
+/* two-step destructive confirm (armed state) */
+.btn.danger-armed { color: #fff; background: var(--error); border-color: var(--error); }
+.btn.danger-armed:hover { color: #fff; background: var(--error-deep); border-color: var(--error-deep); box-shadow: var(--shadow-1); }
+
 /* ---------- toolbar ---------- */
 .toolbar {
   display: flex;

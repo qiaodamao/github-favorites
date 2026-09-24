@@ -8,7 +8,7 @@
 - **搜索与筛选**：按名称/简介/标签搜索，按语言筛选，按收藏时间、Star、Fork、名称排序
 - **分类管理**：每个项目可打自定义分类标签（卡片上直接输入，带常用分类联想），顶部按分类筛选（含"未分类"），分类随 Gist 一起同步
 - **本地持久化**：收藏保存在浏览器 localStorage，内置 12 个示例项目开箱可见；支持导出/导入 JSON 备份
-- **跨设备云同步**：收藏可同步到你自己 GitHub 账号下的一个 Secret Gist（文件 `github-favorites.json`）。任何设备填同一个 Token 点「开启云端同步」即自动关联，支持变更后自动推送、手动拉取合并 / 推送覆盖（需要 token 具备 `gist` 作用域）
+- **跨设备云同步**：收藏可同步到你自己 GitHub 账号下的一个 Secret Gist（文件 `github-favorites.json`）。任何设备填同一个 Token 点「开启云端同步」即自动关联，新增、修改、取消收藏都会自动同步（删除采用墓碑记录，90 天后自动清理），也支持手动拉取合并 / 推送覆盖（需要 token 具备 `gist` 作用域）
 - **暗色模式**、移动端自适应
 - **可选 Token**：GitHub API 匿名限 60 次/小时，在「设置」中填入 personal access token 可提升到 5000 次/小时（仅存本机）
 
@@ -74,8 +74,14 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
    `https://gist.githubusercontent.com/你的用户名/GistID/raw/github-favorites.json`；
 6. 把固定链接填进 `src/config.js` 的 `DEFAULT_GIST_RAW_URL`，提交并重新部署。
 
-生效后：你每次收藏/刷新数据都会自动同步进这个 Gist，访客看到的默认列表随之更新；
-拉取失败（断网/Gist 删除）时访客自动回退到内置示例数据。
+生效后：你每次收藏/刷新数据都会自动同步进这个 Gist，访客看到的默认列表随之更新。
+
+新访客数据三级降级（任何一层失败自动走下一层，页面永远不会开天窗）：
+
+1. **Gist**（最新鲜，秒级更新）；
+2. **本站 `/defaults.json`**（同域名兜底，大陆等受限网络也能加载；由 `.github/workflows/sync-defaults.yml` 每天自动从 Gist 同步进仓库并触发重新部署，最多滞后 1 天，无需任何密钥）；
+3. **内置 `seed.json` 示例数据**（随代码打包，完全离线可用）。
+
 注意：开启同步前需先在 config.js 里填好链接并部署，之后你 Gist 里的内容即为公开可见。
 
 ## 目录结构
@@ -87,13 +93,19 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
 │   ├── config.js                # 默认公共收藏 Gist 链接等站点配置
 │   ├── api/github.js            # GitHub API 封装、地址解析
 │   ├── api/gist.js              # 云端同步：Gist 读写
-│   ├── api/defaults.js          # 拉取默认公共收藏
-│   ├── store/favorites.js       # 收藏状态 + localStorage 持久化
+│   ├── api/defaults.js          # 拉取默认公共收藏（Gist → 本站 defaults.json 降级）
+│   ├── store/favorites.js       # 收藏状态 + localStorage 持久化（含删除墓碑记录）
+│   ├── store/merge.js           # 同步合并纯逻辑（收藏项 + 墓碑）
 │   ├── store/sync.js            # 云端同步：开启/拉取合并/推送/自动同步
 │   ├── components/
 │   │   ├── RepoCard.vue         # 项目卡片（star/fork/刷新/删除）
+│   │   ├── CategoryManager.vue  # 管理分类弹窗（批量重命名/删除）
 │   │   └── SettingsModal.vue    # Token 设置、导出/导入
 │   ├── data/seed.json           # 内置示例收藏
 │   └── style.css                # 全局样式（含暗色模式）
+├── public/
+│   ├── favicon.svg
+│   └── defaults.json            # 同域兜底默认收藏（Actions 每日自动同步）
+├── .github/workflows/sync-defaults.yml  # 定时：Gist → public/defaults.json
 └── scripts/fetch-seed.mjs       # 重新生成示例数据
 ```

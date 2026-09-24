@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 import { createGist, findGist, readGist, writeGist } from '../api/gist'
 import { getToken } from '../api/github'
 import { favorites, onPersist } from './favorites'
+import { mergeData } from './merge'
 
 const ID_KEY = 'ghf:gistId'
 const AUTO_KEY = 'ghf:autoSync'
@@ -26,25 +27,6 @@ export function setAutoSync(v) {
   localStorage.setItem(AUTO_KEY, v ? '1' : '0')
 }
 
-// Union merge by fullName; the entry with a newer addedAt wins, remote breaks ties.
-// category survives when only the losing side has it (fetched repos carry no category)
-function mergeLists(local, remote) {
-  const map = new Map()
-  for (const item of [...local, ...remote]) {
-    const k = item.fullName.toLowerCase()
-    const prev = map.get(k)
-    if (!prev) {
-      map.set(k, item)
-      continue
-    }
-    const [winner, loser] = (item.addedAt || '') >= (prev.addedAt || '') ? [item, prev] : [prev, item]
-    map.set(k, winner.category === undefined && loser.category !== undefined
-      ? { ...winner, category: loser.category }
-      : winner)
-  }
-  return [...map.values()].sort((a, b) => (b.addedAt || '').localeCompare(a.addedAt || ''))
-}
-
 async function withLock(fn) {
   if (sync.busy) throw new Error('同步进行中，请稍候')
   sync.busy = true
@@ -60,13 +42,18 @@ let suppressAuto = false
 export async function push({ mergeFirst = false } = {}) {
   return withLock(async () => {
     if (!sync.gistId) throw new Error('尚未开启云端同步')
-    let list = favorites.items.value
+    let items = favorites.items.value
+    let deleted = favorites.getDeleted()
     if (mergeFirst) {
       try {
-        list = mergeLists(list, await readGist(sync.gistId))
+        const remote = await readGist(sync.gistId)
+        const merged = mergeData(items, deleted, remote.items, remote.deleted)
+        items = merged.items
+        deleted = merged.deleted
+        replaceQuietly(items, deleted)
       } catch { /* remote unreadable, fall back to plain overwrite */ }
     }
-    await writeGist(sync.gistId, list)
+    await writeGist(sync.gistId, items, deleted)
     sync.lastSyncAt = new Date().toLocaleTimeString()
   })
 }
@@ -82,10 +69,11 @@ function schedulePush() {
   }, 2000)
 }
 
-function replaceQuietly(list) {
+function replaceQuietly(list, deleted) {
   suppressAuto = true
   try {
     favorites.replaceAll(list)
+    if (deleted) favorites.setDeleted(deleted)
   } finally {
     suppressAuto = false
   }
@@ -95,7 +83,8 @@ export async function pull() {
   return withLock(async () => {
     if (!sync.gistId) throw new Error('尚未开启云端同步')
     const remote = await readGist(sync.gistId)
-    replaceQuietly(mergeLists(favorites.items.value, remote))
+    const merged = mergeData(favorites.items.value, favorites.getDeleted(), remote.items, remote.deleted)
+    replaceQuietly(merged.items, merged.deleted)
     sync.lastSyncAt = new Date().toLocaleTimeString()
   })
 }
@@ -108,12 +97,12 @@ export async function enableCloudSync() {
     if (existing) {
       sync.gistId = existing
       const remote = await readGist(existing)
-      const merged = mergeLists(favorites.items.value, remote)
-      replaceQuietly(merged)
-      await writeGist(existing, merged)
+      const merged = mergeData(favorites.items.value, favorites.getDeleted(), remote.items, remote.deleted)
+      replaceQuietly(merged.items, merged.deleted)
+      await writeGist(existing, merged.items, merged.deleted)
       toast('已关联云端收藏库并完成合并')
     } else {
-      sync.gistId = await createGist(favorites.items.value)
+      sync.gistId = await createGist(favorites.items.value, favorites.getDeleted())
       toast('已创建云端收藏库（Secret Gist）')
     }
     localStorage.setItem(ID_KEY, sync.gistId)

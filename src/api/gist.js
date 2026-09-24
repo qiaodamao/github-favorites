@@ -27,11 +27,12 @@ async function request(url, opts, what) {
   return res.json()
 }
 
-function toContent(items) {
-  return JSON.stringify(items, null, 2)
+// v2 格式：{ version: 2, items, deleted }；旧格式为纯数组，读取时兼容
+function toContent(items, deleted = []) {
+  return JSON.stringify({ version: 2, items, deleted }, null, 2)
 }
 
-export async function createGist(items) {
+export async function createGist(items, deleted) {
   const j = await request(
     'https://api.github.com/gists',
     {
@@ -40,7 +41,7 @@ export async function createGist(items) {
       body: JSON.stringify({
         description: 'GitHub Favorites 云端收藏同步',
         public: false,
-        files: { [FILE]: { content: toContent(items) } },
+        files: { [FILE]: { content: toContent(items, deleted) } },
       }),
     },
     '创建 Gist'
@@ -69,18 +70,24 @@ export async function readGist(id) {
     if (!raw.ok) throw new Error('下载收藏内容失败')
     text = await raw.text()
   }
-  const list = JSON.parse(text)
-  if (!Array.isArray(list)) throw new Error('云端数据格式不正确')
-  return list.filter((i) => i && i.fullName && i.htmlUrl)
+  const data = JSON.parse(text)
+  const arr = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : null)
+  if (!arr) throw new Error('云端数据格式不正确')
+  const items = arr.filter((i) => i && i.fullName && i.htmlUrl)
+  const deleted =
+    data && !Array.isArray(data) && Array.isArray(data.deleted)
+      ? data.deleted.filter((d) => d && d.fullName && d.deletedAt)
+      : []
+  return { items, deleted }
 }
 
-export async function writeGist(id, items) {
+export async function writeGist(id, items, deleted) {
   await request(
     `https://api.github.com/gists/${id}`,
     {
       method: 'PATCH',
       headers: headers(),
-      body: JSON.stringify({ files: { [FILE]: { content: toContent(items) } } }),
+      body: JSON.stringify({ files: { [FILE]: { content: toContent(items, deleted) } } }),
     },
     '推送 Gist'
   )

@@ -1,0 +1,46 @@
+# 每天从公开 Gist 同步一份收藏列表到 public/defaults.json，
+# 作为同域名兜底数据（Gist 被墙/删除时新访客依然能看到列表）。
+# 使用 GitHub 内置临时凭证，无需配置任何密钥。
+name: Sync defaults.json from gist
+
+on:
+  schedule:
+    - cron: '30 1 * * *' # UTC 01:30 = 北京时间 09:30
+  workflow_dispatch: {}   # 允许在 Actions 页面手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch gist -> public/defaults.json
+        env:
+          GIST_RAW_URL: https://gist.githubusercontent.com/qiaodamao/0a6929026841b73643f924ae42a65eb0/raw/github-favorites.json
+        run: |
+          curl -fsSL "$GIST_RAW_URL" -o /tmp/gist.json
+          node -e '
+            const fs = require("fs");
+            const data = JSON.parse(fs.readFileSync("/tmp/gist.json", "utf8"));
+            const items = (Array.isArray(data) ? data : data.items)
+              .filter((i) => i && i.fullName && i.htmlUrl);
+            if (!items.length) throw new Error("gist contains no valid items, aborting");
+            fs.mkdirSync("public", { recursive: true });
+            fs.writeFileSync("public/defaults.json", JSON.stringify(items, null, 2) + "\n");
+            console.log("wrote", items.length, "items");
+          '
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- public/defaults.json; then
+            git add public/defaults.json
+            git commit -m "每日同步 defaults.json"
+            git push
+          else
+            echo "no changes"
+          fi
