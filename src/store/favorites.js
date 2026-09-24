@@ -50,11 +50,12 @@ export const favorites = {
   },
   add(repo) {
     const idx = state.items.findIndex((i) => i.fullName.toLowerCase() === repo.fullName.toLowerCase())
-    const item = { ...repo, addedAt: new Date().toISOString() }
+    const now = new Date().toISOString()
     if (idx >= 0) {
-      state.items[idx] = { ...item, addedAt: state.items[idx].addedAt || item.addedAt }
+      const old = state.items[idx]
+      state.items[idx] = { ...old, ...repo, category: repo.category ?? old.category, addedAt: old.addedAt || now }
     } else {
-      state.items.unshift(item)
+      state.items.unshift({ ...repo, addedAt: now })
     }
     persist()
     return idx < 0

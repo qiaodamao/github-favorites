@@ -26,13 +26,21 @@ export function setAutoSync(v) {
   localStorage.setItem(AUTO_KEY, v ? '1' : '0')
 }
 
-// Union merge by fullName; the entry with a newer addedAt wins, remote breaks ties
+// Union merge by fullName; the entry with a newer addedAt wins, remote breaks ties.
+// category survives when only the losing side has it (fetched repos carry no category)
 function mergeLists(local, remote) {
   const map = new Map()
   for (const item of [...local, ...remote]) {
     const k = item.fullName.toLowerCase()
     const prev = map.get(k)
-    if (!prev || (item.addedAt || '') >= (prev.addedAt || '')) map.set(k, item)
+    if (!prev) {
+      map.set(k, item)
+      continue
+    }
+    const [winner, loser] = (item.addedAt || '') >= (prev.addedAt || '') ? [item, prev] : [prev, item]
+    map.set(k, winner.category === undefined && loser.category !== undefined
+      ? { ...winner, category: loser.category }
+      : winner)
   }
   return [...map.values()].sort((a, b) => (b.addedAt || '').localeCompare(a.addedAt || ''))
 }
