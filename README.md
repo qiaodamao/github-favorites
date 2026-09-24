@@ -1,6 +1,6 @@
 # GitHub 收藏（GitHub Favorites）
 
-一个类 [HelloGitHub](https://hellogithub.com/) 的开源项目收藏网站：
+一个开源项目收藏网站：
 
 - **添加收藏**：粘贴 GitHub 项目地址（`owner/repo` 或完整 URL），自动调用 GitHub API 解析项目介绍、Star、Fork、语言、标签、最近更新时间
 - **查看/跳转**：点击卡片标题直达项目主页，有官网的项目显示「官网 ↗」
