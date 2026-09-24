@@ -68,8 +68,9 @@ function setCategory(e) {
 
     <p class="desc">{{ repo.description || '暂无描述' }}</p>
 
-    <div v-if="repo.topics?.length" class="topics">
-      <span v-for="t in repo.topics.slice(0, 4)" :key="t" class="topic">{{ t }}</span>
+    <!-- 占位也要渲染：虚拟滚动要求所有卡片等高 -->
+    <div class="topics">
+      <span v-for="t in (repo.topics || []).slice(0, 4)" :key="t" class="topic">{{ t }}</span>
     </div>
 
     <div class="meta">

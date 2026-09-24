@@ -89,7 +89,7 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
 ```
 ├── index.html
 ├── src/
-│   ├── App.vue                  # 页面主体：添加、搜索、筛选、排序
+│   ├── App.vue                  # 页面主体：添加、搜索、筛选、排序、虚拟滚动列表
 │   ├── config.js                # 默认公共收藏 Gist 链接等站点配置
 │   ├── api/github.js            # GitHub API 封装、地址解析
 │   ├── api/gist.js              # 云端同步：Gist 读写

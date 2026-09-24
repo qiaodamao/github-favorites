@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { fetchRepo, parseRepoInput } from './api/github'
 import { favorites } from './store/favorites'
 import { formatNumber } from './utils/format'
@@ -75,6 +75,80 @@ const filtered = computed(() => {
   else sorted.sort((a, b) => (b.addedAt || '').localeCompare(a.addedAt || ''))
   return sorted
 })
+
+// ---------- 虚拟滚动：只渲染视口内的行（含上下缓冲），万级列表也不卡 ----------
+const OVERSCAN = 4 // 上下各多渲染几行，防止快速滚动露白
+const gridWrap = ref(null)
+const winTop = ref(0) // 已滚动进入列表区的距离
+const viewportH = ref(typeof window !== 'undefined' ? window.innerHeight : 800)
+const cols = ref(1)
+const gap = ref(24)
+const rowH = ref(265) // 卡片实测高度兜底值，mount 后会被真实测量覆盖
+const anchorRow = ref(null) // flashCard 定位时强制把该行渲染进窗口
+
+const stride = computed(() => rowH.value + gap.value)
+const totalRows = computed(() => Math.ceil(filtered.value.length / cols.value))
+const totalH = computed(() =>
+  totalRows.value ? totalRows.value * rowH.value + (totalRows.value - 1) * gap.value : 0
+)
+const winRowCount = computed(() => Math.ceil(viewportH.value / stride.value) + OVERSCAN * 2)
+const startRow = computed(() => {
+  const maxStart = Math.max(0, totalRows.value - winRowCount.value)
+  if (anchorRow.value != null) {
+    return Math.min(Math.max(0, anchorRow.value - Math.floor(winRowCount.value / 2)), maxStart)
+  }
+  return Math.min(Math.max(0, Math.floor(winTop.value / stride.value) - OVERSCAN), maxStart)
+})
+const windowItems = computed(() =>
+  filtered.value.slice(startRow.value * cols.value, Math.min(totalRows.value, startRow.value + winRowCount.value) * cols.value)
+)
+const gridStyle = computed(() => ({
+  transform: `translateY(${startRow.value * stride.value}px)`,
+  gridTemplateColumns: `repeat(${cols.value}, minmax(0, 1fr))`,
+  gap: `${gap.value}px`,
+}))
+
+function measure() {
+  viewportH.value = window.innerHeight
+  const wrap = gridWrap.value
+  if (!wrap) return
+  if (window.matchMedia('(max-width: 640px)').matches) {
+    cols.value = 1
+    gap.value = 16
+  } else {
+    gap.value = 24
+    cols.value = Math.max(1, Math.floor((wrap.clientWidth + gap.value) / (300 + gap.value)))
+  }
+  const card = wrap.querySelector('.card')
+  if (card) rowH.value = card.offsetHeight
+  winTop.value = Math.max(0, -wrap.getBoundingClientRect().top)
+}
+
+// 筛选/排序变化后列表高度会变，重新测量布局
+watch([query, lang, cat, sort], async () => {
+  anchorRow.value = null
+  await nextTick()
+  measure()
+})
+
+// 数据异步到位（默认收藏/同步拉取）后网格才出现，需要补一次测量
+watch(filtered, async () => {
+  await nextTick()
+  measure()
+})
+
+let scrollTimer = null
+function onScroll() {
+  if (scrollTimer) return
+  // 用 setTimeout 而非 rAF：后台标签页 rAF 不执行
+  scrollTimer = setTimeout(() => {
+    scrollTimer = null
+    const wrap = gridWrap.value
+    if (!wrap) return
+    viewportH.value = window.innerHeight
+    winTop.value = Math.max(0, -wrap.getBoundingClientRect().top)
+  }, 50)
+}
 
 const STALE_MS = 7 * 24 * 3600 * 1000
 const refreshingAll = ref(null)
@@ -160,15 +234,28 @@ async function flashCard(fullName) {
     cat.value = ''
   }
   await nextTick()
+  const idx = filtered.value.findIndex((r) => r.fullName.toLowerCase() === key)
+  if (idx < 0) return
+  measure()
+  const row = Math.floor(idx / cols.value)
+  anchorRow.value = row // 强制目标行进入渲染窗口，哪怕它在几万行之外
+  await nextTick()
+  const wrap = gridWrap.value
+  if (wrap) {
+    const y = wrap.getBoundingClientRect().top + window.scrollY + row * stride.value - window.innerHeight / 2
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+  }
   const el = [...document.querySelectorAll('.card')].find(
     (c) => c.dataset.fullName && c.dataset.fullName.toLowerCase() === key
   )
-  if (!el) return
-  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  el.classList.remove('flash')
-  void el.offsetWidth
-  el.classList.add('flash')
-  setTimeout(() => el.classList.remove('flash'), 2400)
+  if (el) {
+    el.classList.remove('flash')
+    void el.offsetWidth
+    el.classList.add('flash')
+    setTimeout(() => el.classList.remove('flash'), 2400)
+  }
+  // 平滑滚动落位后再解除锚定，届时自然窗口已包含目标行
+  setTimeout(() => { anchorRow.value = null }, 1200)
 }
 
 function toggleDark() {
@@ -182,10 +269,19 @@ onMounted(() => {
     dark.value = true
     document.documentElement.classList.add('dark')
   }
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', measure)
+  measure()
   onSyncToast(toast)
   initSync()
     .then(loadDefaults)
     .then(refreshStale)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', measure)
+  clearTimeout(scrollTimer)
 })
 </script>
 
@@ -271,8 +367,10 @@ onMounted(() => {
       <option v-for="c in categories.datalist" :key="c" :value="c" />
     </datalist>
 
-    <section v-if="filtered.length" class="grid">
-      <RepoCard v-for="r in filtered" :key="r.fullName" :repo="r" :data-full-name="r.fullName" @toast="toast" />
+    <section v-if="filtered.length" ref="gridWrap" class="grid-wrap" :style="{ height: totalH + 'px' }">
+      <div class="grid" :style="gridStyle">
+        <RepoCard v-for="r in windowItems" :key="r.fullName" :repo="r" :data-full-name="r.fullName" @toast="toast" />
+      </div>
     </section>
     <section v-else class="empty">
       <p>{{ items.length ? '没有匹配的项目，换个关键词试试' : '还没有收藏，粘贴一个 GitHub 项目地址开始吧' }}</p>

@@ -370,10 +370,14 @@ html.dark .select {
 }
 
 /* ---------- cards ---------- */
+/* 虚拟滚动：外层撑出总高度，内层网格绝对定位 + translateY 移到窗口行 */
+.grid-wrap { position: relative; }
 .grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
 }
 .card {
   display: flex;
@@ -426,11 +430,13 @@ html.dark .select {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  height: 40px; /* 虚拟滚动要求卡片等高：描述固定两行 */
   min-height: 40px;
 }
 
-.topics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.topics { display: flex; flex-wrap: nowrap; overflow: hidden; min-height: 20px; gap: 6px; margin-top: 12px; }
 .topic {
+  flex-shrink: 0;
   font-family: var(--mono);
   font-size: 11px;
   line-height: 16px;
@@ -444,7 +450,8 @@ html.dark .select {
 .meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow: hidden;
   gap: 14px;
   margin-top: 16px;
   font-family: var(--mono);
@@ -659,6 +666,5 @@ html.dark .select {
   .add-box { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px; border-radius: var(--r-lg); }
   .add-input { padding: 12px 8px; }
   .btn.primary { width: 100%; }
-  .grid { grid-template-columns: 1fr; gap: 16px; }
   .stat span { display: none; }
 }
