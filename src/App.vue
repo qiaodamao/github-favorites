@@ -8,6 +8,7 @@ import SettingsModal from './components/SettingsModal.vue'
 import CategoryManager from './components/CategoryManager.vue'
 import { initSync, onSyncToast, sync } from './store/sync'
 import { fetchDefaultFavorites } from './api/defaults'
+import { CAT_SUGGESTIONS, sortCategories } from './store/catOrder'
 
 const input = ref('')
 const adding = ref(false)
@@ -38,8 +39,6 @@ const languages = computed(() => {
   return [...set].sort()
 })
 
-const CAT_SUGGESTIONS = ['AI', '开发工具', '命令行工具', '设计创意', '资源集合', '前端', '学习资源', '效率工具']
-
 function goHome() {
   query.value = ''
   lang.value = ''
@@ -51,7 +50,7 @@ function goHome() {
 
 const categories = computed(() => {
   const set = new Set(items.value.map((i) => i.category).filter(Boolean))
-  const known = [...set].sort((a, b) => CAT_SUGGESTIONS.indexOf(a) - CAT_SUGGESTIONS.indexOf(b) || a.localeCompare(b))
+  const known = sortCategories([...set])
   return { list: known, datalist: [...new Set([...CAT_SUGGESTIONS, ...known])] }
 })
 

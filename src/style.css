@@ -355,6 +355,7 @@ html.dark .select {
 .cat-row:last-child { border-bottom: none; }
 .cat-name { font-size: 14px; font-weight: 500; letter-spacing: -0.28px; }
 .cat-count { font-family: var(--mono); font-size: 12px; color: var(--mute); margin-right: auto; }
+.cat-sort { display: inline-flex; gap: 4px; margin-right: 4px; }
 .cat-rename {
   flex: 1;
   min-width: 0;

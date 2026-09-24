@@ -95,11 +95,12 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
 │   ├── api/gist.js              # 云端同步：Gist 读写
 │   ├── api/defaults.js          # 拉取默认公共收藏（Gist → 本站 defaults.json 降级）
 │   ├── store/favorites.js       # 收藏状态 + localStorage 持久化（含删除墓碑记录）
+│   ├── store/catOrder.js        # 分类显示顺序（本机偏好，保存在浏览器，不随 Gist 同步）
 │   ├── store/merge.js           # 同步合并纯逻辑（收藏项 + 墓碑）
 │   ├── store/sync.js            # 云端同步：开启/拉取合并/推送/自动同步
 │   ├── components/
 │   │   ├── RepoCard.vue         # 项目卡片（star/fork/刷新/删除）
-│   │   ├── CategoryManager.vue  # 管理分类弹窗（批量重命名/删除）
+│   │   ├── CategoryManager.vue  # 管理分类弹窗（排序/批量重命名/删除）
 │   │   └── SettingsModal.vue    # Token 设置、导出/导入
 │   ├── data/seed.json           # 内置示例收藏
 │   └── style.css                # 全局样式（含暗色模式）
