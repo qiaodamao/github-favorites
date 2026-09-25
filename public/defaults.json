@@ -1,5 +1,125 @@
 [
   {
+    "fullName": "open-pencil/open-pencil",
+    "owner": "open-pencil",
+    "name": "open-pencil",
+    "avatar": "https://avatars.githubusercontent.com/u/264800975?v=4",
+    "description": "AI-native design editor. Open-source Figma alternative.",
+    "stargazers": 8592,
+    "forks": 845,
+    "language": "TypeScript",
+    "topics": [
+      "ai",
+      "collaboration",
+      "design-editor",
+      "figma-alternative",
+      "open-source",
+      "skia"
+    ],
+    "homepage": "https://openpencil.dev",
+    "pushedAt": "2026-09-23T13:11:50Z",
+    "htmlUrl": "https://github.com/open-pencil/open-pencil",
+    "refreshedAt": "2026-09-24T09:19:03.789Z",
+    "addedAt": "2026-09-24T09:19:03.789Z",
+    "category": "设计创意"
+  },
+  {
+    "fullName": "ZSeven-W/openpencil",
+    "owner": "ZSeven-W",
+    "name": "openpencil",
+    "avatar": "https://avatars.githubusercontent.com/u/218180147?v=4",
+    "description": "The world's first open-source AI-native vector design tool and the first to feature concurrent Agent Teams. Design-as-Code. Turn prompts into UI directly on the live canvas. A modern alternative to Pencil.",
+    "stargazers": 6017,
+    "forks": 522,
+    "language": "Rust",
+    "topics": [
+      "agent",
+      "agent-team",
+      "ai",
+      "claude",
+      "claude-code",
+      "codex"
+    ],
+    "homepage": "https://op.zseven.tech",
+    "pushedAt": "2026-09-23T17:46:59Z",
+    "htmlUrl": "https://github.com/ZSeven-W/openpencil",
+    "refreshedAt": "2026-09-24T09:17:17.375Z",
+    "addedAt": "2026-09-24T09:17:17.375Z",
+    "category": "设计创意"
+  },
+  {
+    "fullName": "cclank/clay-safari",
+    "owner": "cclank",
+    "name": "clay-safari",
+    "avatar": "https://avatars.githubusercontent.com/u/29557585?v=4",
+    "description": "黏土风格 3D 双语动物世界 · A playful clay-style animal world built with Three.js and Blender.",
+    "stargazers": 176,
+    "forks": 44,
+    "language": "JavaScript",
+    "topics": [
+      "blender",
+      "cloudflare-workers",
+      "education",
+      "threejs",
+      "webgl"
+    ],
+    "homepage": "https://clay-safari.lanshuagent.com",
+    "pushedAt": "2026-09-07T13:43:16Z",
+    "htmlUrl": "https://github.com/cclank/clay-safari",
+    "refreshedAt": "2026-09-24T08:47:24.318Z",
+    "addedAt": "2026-09-24T08:47:24.318Z",
+    "category": "游戏娱乐"
+  },
+  {
+    "fullName": "GitHubDaily/GitHubDaily",
+    "owner": "GitHubDaily",
+    "name": "GitHubDaily",
+    "avatar": "https://avatars.githubusercontent.com/u/46262515?v=4",
+    "description": "坚持分享 GitHub 上高质量、有趣实用的开源技术教程、开发者工具、编程网站、技术资讯。A list cool, interesting projects of GitHub.",
+    "stargazers": 47968,
+    "forks": 4699,
+    "language": null,
+    "topics": [
+      "ai",
+      "algorithms-and-data-structures",
+      "backend",
+      "developer-tools",
+      "development",
+      "frontend"
+    ],
+    "homepage": "https://githubdaily.com",
+    "pushedAt": "2025-12-31T18:59:20Z",
+    "htmlUrl": "https://github.com/GitHubDaily/GitHubDaily",
+    "refreshedAt": "2026-09-24T08:46:27.379Z",
+    "addedAt": "2026-09-24T08:46:27.379Z",
+    "category": "开源",
+    "catAt": "2026-09-24T09:56:18.585Z"
+  },
+  {
+    "fullName": "LearnPrompt/awesome-seedance",
+    "owner": "LearnPrompt",
+    "name": "awesome-seedance",
+    "avatar": "https://avatars.githubusercontent.com/u/131418633?v=4",
+    "description": "🎬 Evidence-led Seedance 2.5 / 2.0 prompt library: 463 cases traced to original posts, 264 cross-model retest runs with public verdicts, 25 copy-ready templates, 60 installable AI-video Skills. EN / 中文 / 日本語.",
+    "stargazers": 1320,
+    "forks": 244,
+    "language": "JavaScript",
+    "topics": [
+      "agent-skill",
+      "ai-video",
+      "ai-video-generation",
+      "awesome",
+      "awesome-list",
+      "bytedance"
+    ],
+    "homepage": "https://goodcase.ai/cases?filter=video",
+    "pushedAt": "2026-09-24T06:54:19Z",
+    "htmlUrl": "https://github.com/LearnPrompt/awesome-seedance",
+    "refreshedAt": "2026-09-24T08:45:22.662Z",
+    "addedAt": "2026-09-24T08:45:22.662Z",
+    "category": "视频"
+  },
+  {
     "fullName": "visioncortex/vtracer",
     "owner": "visioncortex",
     "name": "vtracer",
@@ -83,7 +203,8 @@
     "htmlUrl": "https://github.com/qiaodamao/wallpaper-mockup-generator",
     "refreshedAt": "2026-09-24T06:51:06.400Z",
     "addedAt": "2026-09-24T06:51:06.400Z",
-    "category": "个人项目"
+    "category": "个人",
+    "catAt": "2026-09-24T09:56:14.561Z"
   },
   {
     "fullName": "qiaodamao/github-favorites",
@@ -100,7 +221,8 @@
     "htmlUrl": "https://github.com/qiaodamao/github-favorites",
     "refreshedAt": "2026-09-24T06:47:13.986Z",
     "addedAt": "2026-09-24T06:47:13.986Z",
-    "category": "个人项目"
+    "category": "个人",
+    "catAt": "2026-09-24T09:56:14.561Z"
   },
   {
     "fullName": "chuspeeism/dashi-ppt-skill",
@@ -145,30 +267,9 @@
     "pushedAt": "2026-09-20T10:22:21Z",
     "htmlUrl": "https://github.com/521xueweihan/HelloGitHub",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.040Z"
-  },
-  {
-    "fullName": "vinta/awesome-python",
-    "owner": "vinta",
-    "name": "awesome-python",
-    "avatar": "https://avatars.githubusercontent.com/u/652070?v=4",
-    "description": "The definitive list that answers \"I want to do X in Python, which tool should I use?\"",
-    "stargazers": 322598,
-    "forks": 28792,
-    "language": "Python",
-    "topics": [
-      "awesome",
-      "awesome-list",
-      "python",
-      "python-frameworks",
-      "python-libraries",
-      "python-tools"
-    ],
-    "homepage": "https://awesome-python.com/",
-    "pushedAt": "2026-09-23T08:25:59Z",
-    "htmlUrl": "https://github.com/vinta/awesome-python",
-    "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.042Z"
+    "refreshedAt": "2026-09-24T02:42:43.040Z",
+    "category": "开源",
+    "catAt": "2026-09-24T09:56:18.585Z"
   },
   {
     "fullName": "penpot/penpot",
@@ -191,29 +292,8 @@
     "pushedAt": "2026-09-23T18:10:35Z",
     "htmlUrl": "https://github.com/penpot/penpot",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.136Z"
-  },
-  {
-    "fullName": "sindresorhus/awesome",
-    "owner": "sindresorhus",
-    "name": "awesome",
-    "avatar": "https://avatars.githubusercontent.com/u/170270?v=4",
-    "description": "😎 Awesome lists about all kinds of interesting topics [NOTE: Pull requests are temporarily disabled until I have a chance to catch up with the existing ones]",
-    "stargazers": 509496,
-    "forks": 37022,
-    "language": null,
-    "topics": [
-      "awesome",
-      "awesome-list",
-      "lists",
-      "resources",
-      "unicorns"
-    ],
-    "homepage": null,
-    "pushedAt": "2026-09-02T02:10:47Z",
-    "htmlUrl": "https://github.com/sindresorhus/awesome",
-    "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.148Z"
+    "refreshedAt": "2026-09-24T02:42:43.136Z",
+    "category": "设计创意"
   },
   {
     "fullName": "ollama/ollama",
@@ -260,7 +340,8 @@
     "pushedAt": "2026-09-24T02:17:39Z",
     "htmlUrl": "https://github.com/langchain-ai/langchain",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.162Z"
+    "refreshedAt": "2026-09-24T02:42:43.162Z",
+    "category": "AI"
   },
   {
     "fullName": "yt-dlp/yt-dlp",
@@ -283,30 +364,8 @@
     "pushedAt": "2026-09-16T07:48:51Z",
     "htmlUrl": "https://github.com/yt-dlp/yt-dlp",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.195Z"
-  },
-  {
-    "fullName": "astral-sh/ruff",
-    "owner": "astral-sh",
-    "name": "ruff",
-    "avatar": "https://avatars.githubusercontent.com/u/115962839?v=4",
-    "description": "An extremely fast Python linter and code formatter, written in Rust.",
-    "stargazers": 49756,
-    "forks": 2433,
-    "language": "Rust",
-    "topics": [
-      "linter",
-      "pep8",
-      "python",
-      "python3",
-      "ruff",
-      "rust"
-    ],
-    "homepage": "https://docs.astral.sh/ruff",
-    "pushedAt": "2026-09-24T01:33:15Z",
-    "htmlUrl": "https://github.com/astral-sh/ruff",
-    "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.225Z"
+    "refreshedAt": "2026-09-24T02:42:43.195Z",
+    "category": "效率工具"
   },
   {
     "fullName": "GraphiteEditor/Graphite",
@@ -329,7 +388,8 @@
     "pushedAt": "2026-09-24T01:32:58Z",
     "htmlUrl": "https://github.com/GraphiteEditor/Graphite",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.233Z"
+    "refreshedAt": "2026-09-24T02:42:43.233Z",
+    "category": "设计创意"
   },
   {
     "fullName": "openclaw/openclaw",
@@ -352,6 +412,7 @@
     "pushedAt": "2026-09-24T02:42:38Z",
     "htmlUrl": "https://github.com/openclaw/openclaw",
     "addedAt": null,
-    "refreshedAt": "2026-09-24T02:42:43.234Z"
+    "refreshedAt": "2026-09-24T02:42:43.234Z",
+    "category": "AI"
   }
 ]
