@@ -27,12 +27,12 @@ async function request(url, opts, what) {
   return res.json()
 }
 
-// v2 格式：{ version: 2, items, deleted }；旧格式为纯数组，读取时兼容
-function toContent(items, deleted = []) {
-  return JSON.stringify({ version: 2, items, deleted }, null, 2)
+// v2 格式：{ version: 2, items, deleted, catOrder, catOrderAt }；旧格式为纯数组，读取时兼容
+function toContent(items, deleted = [], catOrder = [], catOrderAt = '') {
+  return JSON.stringify({ version: 2, items, deleted, catOrder, catOrderAt }, null, 2)
 }
 
-export async function createGist(items, deleted) {
+export async function createGist(items, deleted, catOrder, catOrderAt) {
   const j = await request(
     'https://api.github.com/gists',
     {
@@ -41,7 +41,7 @@ export async function createGist(items, deleted) {
       body: JSON.stringify({
         description: 'GitHub Favorites 云端收藏同步',
         public: false,
-        files: { [FILE]: { content: toContent(items, deleted) } },
+        files: { [FILE]: { content: toContent(items, deleted, catOrder, catOrderAt) } },
       }),
     },
     '创建 Gist'
@@ -78,16 +78,18 @@ export async function readGist(id) {
     data && !Array.isArray(data) && Array.isArray(data.deleted)
       ? data.deleted.filter((d) => d && d.fullName && d.deletedAt)
       : []
-  return { items, deleted }
+  const catOrder = data && !Array.isArray(data) && Array.isArray(data.catOrder) ? data.catOrder : []
+  const catOrderAt = data && !Array.isArray(data) && typeof data.catOrderAt === 'string' ? data.catOrderAt : ''
+  return { items, deleted, catOrder, catOrderAt }
 }
 
-export async function writeGist(id, items, deleted) {
+export async function writeGist(id, items, deleted, catOrder, catOrderAt) {
   await request(
     `https://api.github.com/gists/${id}`,
     {
       method: 'PATCH',
       headers: headers(),
-      body: JSON.stringify({ files: { [FILE]: { content: toContent(items, deleted) } } }),
+      body: JSON.stringify({ files: { [FILE]: { content: toContent(items, deleted, catOrder, catOrderAt) } } }),
     },
     '推送 Gist'
   )

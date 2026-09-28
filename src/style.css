@@ -126,7 +126,6 @@ a:hover { color: var(--link-deep); }
   letter-spacing: 0.4px;
   color: var(--mute);
 }
-.stat + .stat { padding-left: 10px; border-left: 1px solid var(--hairline); }
 
 /* circular icon buttons */
 .icon-btn {

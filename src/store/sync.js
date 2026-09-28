@@ -2,7 +2,8 @@ import { reactive } from 'vue'
 import { createGist, findGist, readGist, writeGist } from '../api/gist'
 import { getToken } from '../api/github'
 import { favorites, onPersist } from './favorites'
-import { mergeData } from './merge'
+import { mergeData, mergeCatOrders } from './merge'
+import { getCatOrderState, setCatOrder, onCatOrderChange } from './catOrder'
 
 const ID_KEY = 'ghf:gistId'
 const AUTO_KEY = 'ghf:autoSync'
@@ -44,16 +45,19 @@ export async function push({ mergeFirst = false } = {}) {
     if (!sync.gistId) throw new Error('尚未开启云端同步')
     let items = favorites.items.value
     let deleted = favorites.getDeleted()
+    let co = getCatOrderState()
     if (mergeFirst) {
       try {
         const remote = await readGist(sync.gistId)
         const merged = mergeData(items, deleted, remote.items, remote.deleted)
         items = merged.items
         deleted = merged.deleted
+        co = mergeCatOrders(co.order, co.at, remote.catOrder, remote.catOrderAt)
         replaceQuietly(items, deleted)
+        setCatOrder(co.order, co.at)
       } catch { /* remote unreadable, fall back to plain overwrite */ }
     }
-    await writeGist(sync.gistId, items, deleted)
+    await writeGist(sync.gistId, items, deleted, co.order, co.at)
     sync.lastSyncAt = new Date().toLocaleTimeString()
   })
 }
@@ -84,7 +88,10 @@ export async function pull() {
     if (!sync.gistId) throw new Error('尚未开启云端同步')
     const remote = await readGist(sync.gistId)
     const merged = mergeData(favorites.items.value, favorites.getDeleted(), remote.items, remote.deleted)
+    const local = getCatOrderState()
+    const co = mergeCatOrders(local.order, local.at, remote.catOrder, remote.catOrderAt)
     replaceQuietly(merged.items, merged.deleted)
+    setCatOrder(co.order, co.at)
     sync.lastSyncAt = new Date().toLocaleTimeString()
   })
 }
@@ -98,11 +105,15 @@ export async function enableCloudSync() {
       sync.gistId = existing
       const remote = await readGist(existing)
       const merged = mergeData(favorites.items.value, favorites.getDeleted(), remote.items, remote.deleted)
+      const local = getCatOrderState()
+      const co = mergeCatOrders(local.order, local.at, remote.catOrder, remote.catOrderAt)
       replaceQuietly(merged.items, merged.deleted)
-      await writeGist(existing, merged.items, merged.deleted)
+      setCatOrder(co.order, co.at)
+      await writeGist(existing, merged.items, merged.deleted, co.order, co.at)
       toast('已关联云端收藏库并完成合并')
     } else {
-      sync.gistId = await createGist(favorites.items.value, favorites.getDeleted())
+      const local = getCatOrderState()
+      sync.gistId = await createGist(favorites.items.value, favorites.getDeleted(), local.order, local.at)
       toast('已创建云端收藏库（Secret Gist）')
     }
     localStorage.setItem(ID_KEY, sync.gistId)
@@ -120,6 +131,7 @@ export function disableCloudSync() {
 
 export async function initSync() {
   onPersist(schedulePush)
+  onCatOrderChange(schedulePush)
   if (sync.autoSync && sync.gistId && getToken()) {
     try {
       await pull()

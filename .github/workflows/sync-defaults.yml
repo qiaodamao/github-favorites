@@ -28,8 +28,11 @@ jobs:
             const items = (Array.isArray(data) ? data : data.items)
               .filter((i) => i && i.fullName && i.htmlUrl);
             if (!items.length) throw new Error("gist contains no valid items, aborting");
+            const out = Array.isArray(data)
+              ? items
+              : { version: 2, items, catOrder: data.catOrder || [], catOrderAt: data.catOrderAt || "" };
             fs.mkdirSync("public", { recursive: true });
-            fs.writeFileSync("public/defaults.json", JSON.stringify(items, null, 2) + "\n");
+            fs.writeFileSync("public/defaults.json", JSON.stringify(out, null, 2) + "\n");
             console.log("wrote", items.length, "items");
           '
 

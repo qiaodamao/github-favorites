@@ -64,3 +64,13 @@ export function mergeData(localItems, localDeleted, remoteItems, remoteDeleted) 
   const items = mergeLists(filterAlive(localItems, deleted), filterAlive(remoteItems, deleted))
   return { items, deleted }
 }
+
+// 分类显示顺序：整体是一个值，按修改时间戳新者胜；
+// 平局取非空的一侧（优先远端），兼容没有顺序的旧云端数据
+export function mergeCatOrders(localOrder, localAt, remoteOrder, remoteAt) {
+  const la = localAt || ''
+  const ra = remoteAt || ''
+  if (la > ra) return { order: localOrder, at: la }
+  if (ra > la) return { order: remoteOrder, at: ra }
+  return remoteOrder && remoteOrder.length ? { order: remoteOrder, at: ra } : { order: localOrder, at: la }
+}

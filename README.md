@@ -95,7 +95,7 @@ node scripts/fetch-seed.mjs   # 修改脚本里的仓库列表后重新生成 se
 │   ├── api/gist.js              # 云端同步：Gist 读写
 │   ├── api/defaults.js          # 拉取默认公共收藏（Gist → 本站 defaults.json 降级）
 │   ├── store/favorites.js       # 收藏状态 + localStorage 持久化（含删除墓碑记录）
-│   ├── store/catOrder.js        # 分类显示顺序（本机偏好，保存在浏览器，不随 Gist 同步）
+│   ├── store/catOrder.js        # 分类显示顺序（随 Gist 同步，按修改时间戳新旧合并）
 │   ├── store/merge.js           # 同步合并纯逻辑（收藏项 + 墓碑）
 │   ├── store/sync.js            # 云端同步：开启/拉取合并/推送/自动同步
 │   ├── components/

@@ -8,7 +8,7 @@ import SettingsModal from './components/SettingsModal.vue'
 import CategoryManager from './components/CategoryManager.vue'
 import { initSync, onSyncToast, sync } from './store/sync'
 import { fetchDefaultFavorites } from './api/defaults'
-import { CAT_SUGGESTIONS, sortCategories } from './store/catOrder'
+import { CAT_SUGGESTIONS, sortCategories, applyCatOrderDisplay } from './store/catOrder'
 
 const input = ref('')
 const adding = ref(false)
@@ -31,8 +31,6 @@ function toast(msg, isErr = false) {
 }
 
 const items = favorites.items
-
-const totalStars = computed(() => items.value.reduce((s, i) => s + (i.stargazers || 0), 0))
 
 const languages = computed(() => {
   const set = new Set(items.value.map((i) => i.language).filter(Boolean))
@@ -193,9 +191,11 @@ function refreshStale() {
 
 async function loadDefaults() {
   if (favorites.isUserOwned() || sync.gistId) return
-  const list = await fetchDefaultFavorites()
-  if (list && list.length && !favorites.isUserOwned() && !sync.gistId) {
-    favorites.useDefault(list)
+  const res = await fetchDefaultFavorites()
+  if (res && res.items.length && !favorites.isUserOwned() && !sync.gistId) {
+    favorites.useDefault(res.items)
+    // 访客也按维护者的云端顺序显示分类（仅内存，不写 localStorage）
+    applyCatOrderDisplay(res.catOrder)
   }
 }
 
@@ -296,7 +296,6 @@ onBeforeUnmount(() => {
       </div>
       <div class="header-right">
         <div class="stat"><b>{{ items.length }}</b><span>Favorites</span></div>
-        <div class="stat"><b>{{ formatNumber(totalStars) }}</b><span>Stars</span></div>
         <button class="icon-btn" :title="dark ? '切换浅色' : '切换深色'" @click="toggleDark">
           <svg v-if="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
           <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
@@ -360,7 +359,8 @@ onBeforeUnmount(() => {
         :class="{ active: cat === '__none__' }"
         @click="cat = cat === '__none__' ? '' : '__none__'"
       >未分类</button>
-      <button class="chip manage" @click="showCatManager = true">管理分类</button>
+      <!-- 仅开启云端同步后才提供批量管理入口 -->
+      <button v-if="sync.gistId" class="chip manage" @click="showCatManager = true">管理分类</button>
     </nav>
     <datalist id="cat-list">
       <option v-for="c in categories.datalist" :key="c" :value="c" />

@@ -85,7 +85,7 @@ function removeCategory(name, count) {
         <button class="icon-btn" @click="emit('close')">✕</button>
       </div>
 
-      <p class="hint" style="margin-top:16px">分类由项目上已使用的标签聚合而成。重命名会批量更新所有使用该分类的项目；删除会使这些项目变为未分类。改动会自动同步到云端。用 ↑ / ↓ 可调整分类显示顺序（顺序保存在本机浏览器，不随云端同步）。</p>
+      <p class="hint" style="margin-top:16px">分类由项目上已使用的标签聚合而成。重命名会批量更新所有使用该分类的项目；删除会使这些项目变为未分类。改动会自动同步到云端。用 ↑ / ↓ 调整分类显示顺序，开启云端同步后跨设备一致。</p>
 
       <div v-if="!counts.length" class="empty" style="padding:32px 0">暂无分类，先在项目卡片上添加分类</div>
 
