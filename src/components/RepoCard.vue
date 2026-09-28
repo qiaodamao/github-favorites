@@ -98,7 +98,10 @@ function setCategory(e) {
         <i class="dot" :data-lang="repo.language"></i>{{ repo.language }}
       </span>
       <span :title="snapTitle">★ {{ formatNumber(repo.stargazers) }}</span>
-      <span :title="snapTitle">⑂ {{ formatNumber(repo.forks) }}</span>
+      <span :title="snapTitle" class="fork">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="5" r="2.5"/><circle cx="17" cy="5" r="2.5"/><path d="M7 7.5v2A3.5 3.5 0 0 0 10.5 13h3A3.5 3.5 0 0 0 17 9.5v-2M12 13v6"/></svg>
+        {{ formatNumber(repo.forks) }}
+      </span>
       <span v-if="repo.pushedAt" class="pushed" :title="'最近推送：' + repo.pushedAt">更新于 {{ timeAgo(repo.pushedAt) }}</span>
     </div>
 

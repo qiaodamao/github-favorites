@@ -135,16 +135,21 @@ watch(filtered, async () => {
 })
 
 let scrollTimer = null
+const showTop = ref(false)
 function onScroll() {
   if (scrollTimer) return
   // 用 setTimeout 而非 rAF：后台标签页 rAF 不执行
   scrollTimer = setTimeout(() => {
     scrollTimer = null
+    showTop.value = window.scrollY > window.innerHeight
     const wrap = gridWrap.value
     if (!wrap) return
     viewportH.value = window.innerHeight
     winTop.value = Math.max(0, -wrap.getBoundingClientRect().top)
   }, 50)
+}
+function goTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const STALE_MS = 7 * 24 * 3600 * 1000
@@ -376,10 +381,26 @@ onBeforeUnmount(() => {
   </main>
 
   <footer class="footer">
-    <div class="foot-stat"><b>{{ items.length }}</b> Favorites</div>
-    <div class="foot-mono">Built with Vue 3 + Vite · Deploy on EdgeOne / Vercel / Cloudflare</div>
-    <div style="margin-top:8px">数据来自 GitHub API · 收藏保存在你的浏览器本地</div>
+    <nav class="foot-links">
+      <a href="https://github.com/qiaodamao/github-favorites" target="_blank" rel="noopener">GitHub</a>
+      <span class="sep">·</span>
+      <a href="https://logo.kusheji.com" target="_blank" rel="noopener">矢量logo下载</a>
+      <span class="sep">·</span>
+      <a href="https://mockup.kusheji.com" target="_blank" rel="noopener">壁纸样机生成器</a>
+      <span class="sep">·</span>
+      <a href="https://qt.shijuefuhao.com" target="_blank" rel="noopener">轻图 Pixlite</a>
+      <span class="sep">·</span>
+      <a href="https://pintu.kusheji.com" target="_blank" rel="noopener">酷拼图</a>
+    </nav>
+    <div class="foot-note">数据来自 GitHub API · 收藏保存在你的浏览器本地，你可以使用GitHub Gist 同步数据。</div>
+    <div class="foot-stat">本网站收录开源项目 {{ items.length }} 个</div>
   </footer>
+
+  <Transition name="fade">
+    <button v-if="showTop" class="back-top icon-btn" title="返回顶部" @click="goTop">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </Transition>
 
   <Transition name="fade">
     <div v-if="toastMsg" class="toast" :class="{ error: toastErr }">{{ toastMsg }}</div>

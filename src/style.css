@@ -127,6 +127,16 @@ a:hover { color: var(--link-deep); }
   padding: 0;
 }
 .icon-btn:hover { border-color: var(--faint); box-shadow: var(--shadow-1); }
+
+/* 返回顶部悬浮按钮 */
+.back-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 40;
+  box-shadow: var(--shadow-2);
+}
+.back-top svg { width: 16px; height: 16px; }
 .icon-btn svg { width: 16px; height: 16px; }
 
 /* ---------- hero band (the only place color is allowed) ---------- */
@@ -432,20 +442,25 @@ html.dark .select {
   color: var(--body);
 }
 
+.meta .fork { display: inline-flex; align-items: center; gap: 3px; }
+.meta .fork svg { width: 14px; height: 14px; flex-shrink: 0; }
+
 .meta {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   overflow: hidden;
-  gap: 14px;
+  gap: 10px;
   margin-top: 16px;
   font-family: var(--mono);
   font-size: 12px;
   color: var(--mute);
 }
+/* 窄卡片时优先保语言/★/fork 完整，只有更新时间做省略号截断，避免整行错位 */
+.meta > * { flex-shrink: 0; }
 .lang { display: inline-flex; align-items: center; gap: 5px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); display: inline-block; }
-.pushed { margin-left: auto; }
+.pushed { margin-left: auto; flex-shrink: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .actions {
   display: flex;
@@ -560,7 +575,7 @@ html.dark .select {
   color: var(--body);
   border: 1px solid var(--hairline);
   border-radius: var(--r-sm);
-  background: var(--inset);
+  background: var(--elevated);
   cursor: default;
 }
 
@@ -595,9 +610,12 @@ html.dark .select {
   font-size: 14px;
   color: var(--body);
 }
-.footer .foot-mono { font-family: var(--mono); font-size: 12px; color: var(--mute); }
-.foot-stat { margin-bottom: 20px; font-size: 13px; color: var(--mute); }
-.foot-stat b { font-size: 18px; font-weight: 600; letter-spacing: -0.36px; color: var(--ink); margin-right: 4px; }
+.foot-links { font-size: 14px; }
+.foot-links a { color: var(--link); text-decoration: none; }
+.foot-links a:hover { text-decoration: underline; }
+.foot-links .sep { margin: 0 10px; color: var(--faint); }
+.foot-note { margin-top: 10px; font-size: 13px; color: var(--mute); }
+.foot-stat { margin-top: 10px; font-size: 13px; color: var(--ink); }
 
 /* ---------- modal ---------- */
 .modal-mask {
