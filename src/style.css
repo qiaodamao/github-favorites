@@ -355,7 +355,7 @@ html.dark .select {
 }
 
 /* ---------- cards ---------- */
-/* 虚拟滚动：外层撑出总高度，内层网格绝对定位 + translateY 移到窗口行 */
+/* 虚拟滚动：外层撑出总高度，内层网格绝对定位 + top 移到窗口行（勿用 transform，会破坏原生下拉控件） */
 .grid-wrap { position: relative; }
 .grid {
   position: absolute;
@@ -513,6 +513,56 @@ html.dark .select {
 }
 .cat-input::placeholder { color: var(--faint); }
 .cat-input:hover, .cat-input:focus { border-style: solid; border-color: var(--ink); color: var(--ink); }
+
+/* 自定义分类选择面板（替代原生 datalist：datalist 只会列出与当前输入前缀匹配的选项） */
+.cat-picker { position: relative; display: inline-flex; }
+.cat-pop {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  min-width: 150px;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  background: var(--elevated);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-2);
+}
+.cat-opt {
+  text-align: left;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cat-opt:hover { background: var(--inset); }
+.cat-opt.faint { color: var(--mute); }
+.cat-opt.current { color: var(--link); font-weight: 500; }
+.cat-opt.clear { color: var(--error); }
+
+/* 未开启云端同步时的只读分类标签 */
+.cat-tag.readonly {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 13px;
+  color: var(--body);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--inset);
+  cursor: default;
+}
 
 /* language dot colors — small illustration accents */
 .dot[data-lang='TypeScript'] { background: #3178c6; }

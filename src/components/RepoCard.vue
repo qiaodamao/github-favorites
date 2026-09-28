@@ -2,10 +2,30 @@
 import { computed, ref, onBeforeUnmount } from 'vue'
 import { fetchRepo } from '../api/github'
 import { favorites } from '../store/favorites'
+import { sortCategories, CAT_SUGGESTIONS } from '../store/catOrder'
+import { sync } from '../store/sync'
 import { formatNumber, timeAgo } from '../utils/format'
 
 const props = defineProps({ repo: Object })
 const emit = defineEmits(['toast'])
+
+// 未开启云端同步时分类只读（与管理分类入口同一规则）
+const canEditCat = computed(() => !!sync.gistId)
+
+// 自定义分类选择面板（原生 datalist 只会显示与当前输入前缀匹配的选项，无法点选其他分类）
+const pickerOpen = ref(false)
+const usedCats = computed(() => {
+  const set = new Set(favorites.items.value.map((i) => i.category).filter(Boolean))
+  return sortCategories([...set])
+})
+const otherSuggestions = computed(() => CAT_SUGGESTIONS.filter((c) => !usedCats.value.includes(c)))
+
+function pickCategory(cat) {
+  pickerOpen.value = false
+  if ((props.repo.category || '') === cat) return
+  favorites.update(props.repo.fullName, { ...props.repo, category: cat })
+  emit('toast', cat ? `已设置分类：${cat}` : '已清除分类')
+}
 
 const refreshing = ref(false)
 const snapTitle = computed(() =>
@@ -83,14 +103,35 @@ function setCategory(e) {
     </div>
 
     <div class="actions">
-      <input
-        class="cat-input"
-        list="cat-list"
-        placeholder="＋ 分类"
-        :value="repo.category || ''"
-        title="输入或选择分类，可自定义"
-        @change="setCategory"
-      />
+      <span v-if="canEditCat" class="cat-picker">
+        <input
+          class="cat-input"
+          placeholder="＋ 分类"
+          :value="repo.category || ''"
+          title="点击选择或输入自定义分类"
+          @focus="pickerOpen = true"
+          @blur="pickerOpen = false"
+          @change="setCategory"
+          @keydown.esc="pickerOpen = false"
+        />
+        <div v-if="pickerOpen" class="cat-pop">
+          <button
+            v-for="c in usedCats"
+            :key="c"
+            class="cat-opt"
+            :class="{ current: c === (repo.category || '') }"
+            @mousedown.prevent="pickCategory(c)"
+          >{{ c }}</button>
+          <button
+            v-for="c in otherSuggestions"
+            :key="c"
+            class="cat-opt faint"
+            @mousedown.prevent="pickCategory(c)"
+          >{{ c }}</button>
+          <button v-if="repo.category" class="cat-opt clear" @mousedown.prevent="pickCategory('')">✕ 清除分类</button>
+        </div>
+      </span>
+      <span v-else-if="repo.category" class="cat-tag readonly" title="开启云端同步后可编辑分类">{{ repo.category }}</span>
       <div class="action-icons">
         <button class="icon-sq" :disabled="refreshing" title="刷新项目数据" @click="refresh">
           <svg viewBox="0 0 24 24" :class="{ spinning: refreshing }" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 3v6h-6"/></svg>

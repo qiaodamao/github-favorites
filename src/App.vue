@@ -8,7 +8,7 @@ import SettingsModal from './components/SettingsModal.vue'
 import CategoryManager from './components/CategoryManager.vue'
 import { initSync, onSyncToast, sync } from './store/sync'
 import { fetchDefaultFavorites } from './api/defaults'
-import { CAT_SUGGESTIONS, sortCategories, applyCatOrderDisplay } from './store/catOrder'
+import { sortCategories, applyCatOrderDisplay } from './store/catOrder'
 
 const input = ref('')
 const adding = ref(false)
@@ -48,8 +48,7 @@ function goHome() {
 
 const categories = computed(() => {
   const set = new Set(items.value.map((i) => i.category).filter(Boolean))
-  const known = sortCategories([...set])
-  return { list: known, datalist: [...new Set([...CAT_SUGGESTIONS, ...known])] }
+  return sortCategories([...set])
 })
 
 const filtered = computed(() => {
@@ -100,7 +99,8 @@ const windowItems = computed(() =>
   filtered.value.slice(startRow.value * cols.value, Math.min(totalRows.value, startRow.value + winRowCount.value) * cols.value)
 )
 const gridStyle = computed(() => ({
-  transform: `translateY(${startRow.value * stride.value}px)`,
+  // 用 top 而非 transform 定位：transform 祖先会导致下拉弹层等控件定位异常
+  top: `${startRow.value * stride.value}px`,
   gridTemplateColumns: `repeat(${cols.value}, minmax(0, 1fr))`,
   gap: `${gap.value}px`,
 }))
@@ -346,7 +346,7 @@ onBeforeUnmount(() => {
     <nav class="chips">
       <button class="chip" :class="{ active: cat === '' }" @click="cat = ''">全部</button>
       <button
-        v-for="c in categories.list"
+        v-for="c in categories"
         :key="c"
         class="chip"
         :class="{ active: cat === c }"
@@ -361,9 +361,6 @@ onBeforeUnmount(() => {
       <!-- 仅开启云端同步后才提供批量管理入口 -->
       <button v-if="sync.gistId" class="chip manage" @click="showCatManager = true">管理分类</button>
     </nav>
-    <datalist id="cat-list">
-      <option v-for="c in categories.datalist" :key="c" :value="c" />
-    </datalist>
 
     <section v-if="filtered.length" ref="gridWrap" class="grid-wrap" :style="{ height: totalH + 'px' }">
       <div class="grid" :style="gridStyle">
