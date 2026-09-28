@@ -141,7 +141,7 @@ function onScroll() {
   // 用 setTimeout 而非 rAF：后台标签页 rAF 不执行
   scrollTimer = setTimeout(() => {
     scrollTimer = null
-    showTop.value = window.scrollY > window.innerHeight
+    showTop.value = window.scrollY > 400
     const wrap = gridWrap.value
     if (!wrap) return
     viewportH.value = window.innerHeight
