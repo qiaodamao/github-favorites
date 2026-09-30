@@ -127,6 +127,7 @@ a:hover { color: var(--link-deep); }
   padding: 0;
 }
 .icon-btn:hover { border-color: var(--faint); box-shadow: var(--shadow-1); }
+.icon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* 返回顶部悬浮按钮 */
 .back-top {
@@ -305,7 +306,6 @@ html.dark .select {
 }
 .select:focus { border-color: var(--ink); }
 .toolbar .btn-sm { height: 36px; padding: 0 12px; }
-.count { font-family: var(--mono); font-size: 12px; color: var(--mute); }
 
 /* ---------- category pills ---------- */
 .chips {
@@ -511,7 +511,7 @@ html.dark .select {
 .icon-sq.danger.armed { color: #fff; background: var(--error); border-color: var(--error); }
 .icon-sq.danger.armed:hover { color: #fff; background: var(--error-deep); box-shadow: var(--shadow-1); }
 .icon-sq svg { width: 14px; height: 14px; }
-.icon-sq .spinning { animation: spin 0.9s linear infinite; }
+.icon-sq .spinning, .icon-btn .spinning { animation: spin 0.9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .cat-input {
