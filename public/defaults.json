@@ -2,6 +2,31 @@
   "version": 2,
   "items": [
     {
+      "fullName": "dicebear/dicebear",
+      "owner": "dicebear",
+      "name": "dicebear",
+      "avatar": "https://avatars.githubusercontent.com/u/7983162?v=4",
+      "description": "DiceBear is an avatar library for designers and developers. 🌍",
+      "stargazers": 9757,
+      "forks": 421,
+      "language": "Vue",
+      "topics": [
+        "api",
+        "avataaars",
+        "avatar",
+        "avatar-placeholder",
+        "avatars",
+        "bottts"
+      ],
+      "homepage": "https://www.dicebear.com",
+      "pushedAt": "2026-09-28T19:34:22Z",
+      "htmlUrl": "https://github.com/dicebear/dicebear",
+      "refreshedAt": "2026-10-01T12:52:48.041Z",
+      "addedAt": "2026-10-01T12:52:48.041Z",
+      "category": "其它",
+      "catAt": "2026-10-01T12:52:52.801Z"
+    },
+    {
       "fullName": "larashero3-dotcom/lieflat-charts",
       "owner": "larashero3-dotcom",
       "name": "lieflat-charts",
