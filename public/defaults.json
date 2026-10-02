@@ -2,6 +2,128 @@
   "version": 2,
   "items": [
     {
+      "fullName": "op7418/Night-Patrol",
+      "owner": "op7418",
+      "name": "Night-Patrol",
+      "avatar": "https://avatars.githubusercontent.com/u/13505770?v=4",
+      "description": null,
+      "stargazers": 159,
+      "forks": 41,
+      "language": "TypeScript",
+      "topics": [],
+      "homepage": null,
+      "pushedAt": "2026-04-30T15:02:36Z",
+      "htmlUrl": "https://github.com/op7418/Night-Patrol",
+      "refreshedAt": "2026-10-02T12:51:23.992Z",
+      "addedAt": "2026-10-02T12:51:23.992Z",
+      "category": "游戏娱乐",
+      "catAt": "2026-10-02T12:51:25.987Z"
+    },
+    {
+      "fullName": "andyhuo520/18-floors-of-mayhem",
+      "owner": "andyhuo520",
+      "name": "18-floors-of-mayhem",
+      "avatar": "https://avatars.githubusercontent.com/u/187917479?v=4",
+      "description": "Pixel-art multiplayer descent and boss-battle game built with Codex and Combos CLI.",
+      "stargazers": 21,
+      "forks": 9,
+      "language": "JavaScript",
+      "topics": [],
+      "homepage": null,
+      "pushedAt": "2026-09-24T07:01:29Z",
+      "htmlUrl": "https://github.com/andyhuo520/18-floors-of-mayhem",
+      "refreshedAt": "2026-10-02T12:45:54.998Z",
+      "addedAt": "2026-10-02T12:45:54.998Z",
+      "category": "游戏娱乐",
+      "catAt": "2026-10-02T12:45:58.584Z"
+    },
+    {
+      "fullName": "Kenton-GMI/sakura-crossing",
+      "owner": "Kenton-GMI",
+      "name": "sakura-crossing",
+      "avatar": "https://avatars.githubusercontent.com/u/310775475?v=4",
+      "description": "An explorable Japanese suburban railway-crossing neighbourhood on a small planet, rendered 3D-to-2D as a cel-shaded anime background. Three.js, no image assets.",
+      "stargazers": 535,
+      "forks": 103,
+      "language": "JavaScript",
+      "topics": [],
+      "homepage": null,
+      "pushedAt": "2026-07-29T22:06:45Z",
+      "htmlUrl": "https://github.com/Kenton-GMI/sakura-crossing",
+      "refreshedAt": "2026-10-02T11:05:03.075Z",
+      "addedAt": "2026-10-02T11:05:03.075Z",
+      "category": "游戏娱乐",
+      "catAt": "2026-10-02T11:05:05.491Z"
+    },
+    {
+      "fullName": "bobeff/open-source-games",
+      "owner": "bobeff",
+      "name": "open-source-games",
+      "avatar": "https://avatars.githubusercontent.com/u/675506?v=4",
+      "description": "A list of open source games.",
+      "stargazers": 15534,
+      "forks": 1312,
+      "language": "Python",
+      "topics": [
+        "awesome-list",
+        "games",
+        "open-source"
+      ],
+      "homepage": null,
+      "pushedAt": "2026-02-25T20:22:58Z",
+      "htmlUrl": "https://github.com/bobeff/open-source-games",
+      "refreshedAt": "2026-10-02T09:44:23.278Z",
+      "addedAt": "2026-10-02T09:44:23.278Z",
+      "category": "游戏娱乐",
+      "catAt": "2026-10-02T09:44:25.849Z"
+    },
+    {
+      "fullName": "Free-TV/IPTV",
+      "owner": "Free-TV",
+      "name": "IPTV",
+      "avatar": "https://avatars.githubusercontent.com/u/82442715?v=4",
+      "description": "M3U Playlist for free TV channels",
+      "stargazers": 20874,
+      "forks": 3006,
+      "language": "Python",
+      "topics": [
+        "help-wanted",
+        "looking-for-contributors"
+      ],
+      "homepage": null,
+      "pushedAt": "2026-10-02T06:20:55Z",
+      "htmlUrl": "https://github.com/Free-TV/IPTV",
+      "refreshedAt": "2026-10-02T09:13:53.133Z",
+      "addedAt": "2026-10-02T09:13:53.133Z",
+      "category": "音乐视频",
+      "catAt": "2026-10-02T09:13:55.832Z"
+    },
+    {
+      "fullName": "timoncool/YuE2-Studio",
+      "owner": "timoncool",
+      "name": "YuE2-Studio",
+      "avatar": "https://avatars.githubusercontent.com/u/26026304?v=4",
+      "description": "Local AI song generator with an editable score — YuE2 on your GPU: full songs with vocals, sheet music, covers, exact replay. Native Windows app, no Python, installer with auto-update.",
+      "stargazers": 378,
+      "forks": 33,
+      "language": "TypeScript",
+      "topics": [
+        "abc-notation",
+        "ai-music",
+        "covers",
+        "cuda",
+        "ggml",
+        "local-ai"
+      ],
+      "homepage": "https://timoncool.github.io/YuE2-Studio/",
+      "pushedAt": "2026-10-02T07:38:22Z",
+      "htmlUrl": "https://github.com/timoncool/YuE2-Studio",
+      "refreshedAt": "2026-10-02T07:56:36.176Z",
+      "addedAt": "2026-10-02T07:56:36.176Z",
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
+    },
+    {
       "fullName": "dososo/chinese-traditional-patterns",
       "owner": "dososo",
       "name": "chinese-traditional-patterns",
@@ -211,8 +333,8 @@
       "htmlUrl": "https://github.com/chatfire-AI/huobao-drama",
       "refreshedAt": "2026-09-29T08:42:35.621Z",
       "addedAt": "2026-09-29T08:42:35.621Z",
-      "category": "视频",
-      "catAt": "2026-09-29T08:42:38.685Z"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "Comfy-Org/workflow_templates",
@@ -290,8 +412,8 @@
       "htmlUrl": "https://github.com/glanderness/BeefTV",
       "refreshedAt": "2026-09-29T03:55:08.406Z",
       "addedAt": "2026-09-29T03:55:08.406Z",
-      "category": "视频",
-      "catAt": "2026-09-29T03:55:11.851Z"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "iChochy/NCE",
@@ -512,8 +634,8 @@
       "htmlUrl": "https://github.com/debpalash/VoiceStudio",
       "refreshedAt": "2026-09-29T01:57:16.028Z",
       "addedAt": "2026-09-29T01:57:16.028Z",
-      "category": "视频",
-      "catAt": "2026-09-29T01:57:18.636Z"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "OneMoh/html-explainer",
@@ -537,8 +659,8 @@
       "htmlUrl": "https://github.com/OneMoh/html-explainer",
       "refreshedAt": "2026-09-29T01:56:09.325Z",
       "addedAt": "2026-09-29T01:56:09.325Z",
-      "category": "视频",
-      "catAt": "2026-09-29T01:56:11.951Z"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "jbiaojerry/ebook-treasure-chest",
@@ -580,8 +702,8 @@
       "htmlUrl": "https://github.com/zhuyansen/awesome-claude-video-skills",
       "refreshedAt": "2026-09-29T01:45:11.607Z",
       "addedAt": "2026-09-29T01:45:11.608Z",
-      "category": "视频",
-      "catAt": "2026-09-29T01:45:14.723Z"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "MartinDelophy/awesome-gpt-6-astra",
@@ -979,7 +1101,8 @@
       "htmlUrl": "https://github.com/LearnPrompt/awesome-seedance",
       "refreshedAt": "2026-09-24T08:45:22.662Z",
       "addedAt": "2026-09-24T08:45:22.662Z",
-      "category": "视频"
+      "category": "音乐视频",
+      "catAt": "2026-10-02T07:57:03.567Z"
     },
     {
       "fullName": "visioncortex/vtracer",
@@ -1281,12 +1404,12 @@
   "catOrder": [
     "个人",
     "图文",
-    "视频",
+    "音乐视频",
     "游戏娱乐",
     "设计创意",
     "效率工具",
     "其它",
     "AI"
   ],
-  "catOrderAt": "2026-09-29T02:03:18.029Z"
+  "catOrderAt": "2026-10-02T07:57:03.568Z"
 }
